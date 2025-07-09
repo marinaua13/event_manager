@@ -25,7 +25,7 @@ def send_registration_email(user, event):
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all()
+    queryset = Event.objects.select_related('organizer').prefetch_related('registrations')
     serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filterset_class = EventFilter
@@ -45,5 +45,5 @@ class EventViewSet(viewsets.ModelViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.prefetch_related('event_registrations').all()
     serializer_class = UserSerializer

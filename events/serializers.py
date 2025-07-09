@@ -11,10 +11,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     organizer = serializers.ReadOnlyField(source='organizer.username')
+    registrations_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
-        fields = '__all__'
+        fields = '__all__' + ['registrations_count']
+
+    def get_registrations_count(self, obj):
+        return obj.registrations.count()
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
